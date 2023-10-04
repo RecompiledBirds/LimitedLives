@@ -20,8 +20,8 @@ public class GiveLife {
                                                     ServerPlayer sourcePlayer = source.getSource().getPlayer();
                                                     ServerPlayer target = EntityArgument.getPlayer(source, "player");
 
-                                                    Utility.ModifyPlayerLives(sourcePlayer, -amount);
-                                            Utility.ModifyPlayerLives(target, amount);
+                                                    LifeUtility.ModifyPlayerLives(sourcePlayer, -amount);
+                                            LifeUtility.ModifyPlayerLives(target, amount);
                                                     source.getSource().sendSuccess(Component.literal("Gave " + target.getName().getString() + " " + amount + (amount > 1 ? " lives" : " life") + "."), true);
                                                     return 0;
                                                 }
@@ -34,7 +34,7 @@ public class GiveLife {
                                         .executes((source) -> {
                                             int amount = IntegerArgumentType.getInteger(source, "amount");
                                             ServerPlayer target = EntityArgument.getPlayer(source, "player");
-                                            Utility.SetLives(target, amount);
+                                            LifeUtility.SetLives(target, amount);
                                             source.getSource().sendSuccess(Component.literal("Set " + target.getName().getString() + " lives to " + amount), true);
                                             return 0;
                                         })
@@ -46,7 +46,7 @@ public class GiveLife {
                                         .executes((source) -> {
                                                     int amount = IntegerArgumentType.getInteger(source, "amount");
                                                     ServerPlayer target = EntityArgument.getPlayer(source, "player");
-                                                    Utility.ModifyPlayerLives(target, amount);
+                                                    LifeUtility.ModifyPlayerLives(target, amount);
                                                     source.getSource().sendSuccess(Component.literal("Gave " + target.getName().getString() + " " + amount + (amount > 1 ? " lives" : " life") + "."), true);
                                                     return 0;
                                                 }

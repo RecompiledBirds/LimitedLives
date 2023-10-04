@@ -3,12 +3,11 @@ package com.onelifemod;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 
-public class Utility {
+public class LifeUtility {
     public static final String connectedBefore = "ConnectedBefore";
     public static final String objectiveName = "Lives";
     public static boolean FirstTimeConnection(Player player, CompoundTag data) {
@@ -18,19 +17,11 @@ public class Utility {
         boolean dataShowsConnected = (data.contains(connectedBefore) && data.getBoolean(connectedBefore));
         return sameSpawn && !dataShowsConnected;
     }
-    public static final String persistName = "PlayerPersisted";
     public static final String tagName = "RemainingLives";
-    public static final String persistTagName = "DeathData";
 
-    public static CompoundTag GetTag(LivingEntity e) {
-        CompoundTag persistData = e.getPersistentData().getCompound(persistName);
-        e.getPersistentData().put("PlayerPersisted", persistData);
-        CompoundTag tag = persistData.getCompound(persistTagName);
-        persistData.put(persistTagName, tag);
-        return tag;
-    }
+
     public static int ModifyPlayerLives(ServerPlayer p, int amount){
-        CompoundTag data = GetTag(p);
+        CompoundTag data = CoreUtils.GetPersistentTag(p);
         if (!data.contains(tagName)) {
             data.putInt(tagName, Config.maxLives.get());
         }
@@ -43,7 +34,7 @@ public class Utility {
 
     public static void SetLives(ServerPlayer p, int amount){
         if(amount<0)amount=0;
-        CompoundTag data = GetTag(p);
+        CompoundTag data = CoreUtils.GetPersistentTag(p);
         if (!data.contains(tagName)) {
             data.putInt(tagName, Config.maxLives.get());
         }
@@ -61,7 +52,7 @@ public class Utility {
             board.addPlayerToTeam(name, GetTeam(board, TeamNames.Red));
         }
 
-        p.level.getScoreboard().getOrCreatePlayerScore(p.getName().getString(), p.getLevel().getScoreboard().getOrCreateObjective(Utility.objectiveName)).setScore(amount);
+        p.level.getScoreboard().getOrCreatePlayerScore(p.getName().getString(), p.getLevel().getScoreboard().getOrCreateObjective(LifeUtility.objectiveName)).setScore(amount);
         data.putInt(tagName, amount);
     }
 

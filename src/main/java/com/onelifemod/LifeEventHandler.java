@@ -1,12 +1,10 @@
 package com.onelifemod;
 
-import com.onelifemod.Utility.TeamNames;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
@@ -17,7 +15,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import static com.onelifemod.Utility.*;
+import static com.onelifemod.LifeUtility.*;
 
 public class LifeEventHandler {
 
@@ -40,9 +38,8 @@ public class LifeEventHandler {
 
     @SubscribeEvent
     public void HandleJoinedPlayer(TickEvent.PlayerTickEvent event) {
-        if (!event.side.isServer() || !(event.player instanceof ServerPlayer)) return;
-        ServerPlayer player = (ServerPlayer) event.player;
-        CompoundTag data = GetTag(player);
+        if (!event.side.isServer() || !(event.player instanceof ServerPlayer player)) return;
+        CompoundTag data = CoreUtils.GetPersistentTag(player);
         if (data.contains(connectedBefore) || data.getBoolean(connectedBefore)) return;
 
         ServerLevel level = player.getLevel();
