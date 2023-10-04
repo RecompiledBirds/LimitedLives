@@ -21,7 +21,7 @@ public class onelifemod {
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
+        MinecraftForge.EVENT_BUS.register(new LifeEventHandler());
 
         ForgeConfigSpec.Builder clientBuilder = new ForgeConfigSpec.Builder();
         Config config = new Config(clientBuilder);
