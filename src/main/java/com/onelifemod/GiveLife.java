@@ -4,17 +4,19 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
+
 public class GiveLife {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        LiteralCommandNode<CommandSourceStack> cmd = dispatcher.register(Commands.literal("life")
-                .then(Commands.literal("give")
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .then(Commands.argument("amount", IntegerArgumentType.integer(1))
+        LiteralCommandNode<CommandSourceStack> cmd = dispatcher.register(literal("life")
+                .then(literal("give")
+                        .then(argument("player", EntityArgument.player())
+                                .then(argument("amount", IntegerArgumentType.integer(1))
                                         .executes((source) -> {
                                                     int amount = IntegerArgumentType.getInteger(source, "amount");
                                                     ServerPlayer sourcePlayer = source.getSource().getPlayer();
@@ -28,9 +30,9 @@ public class GiveLife {
                                         )
                                 )
                         )
-                ).then(Commands.literal("set").requires((p) -> p.hasPermission(2))
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .then(Commands.argument("amount", IntegerArgumentType.integer(0))
+                ).then(literal("set").requires((p) -> p.hasPermission(2))
+                        .then(argument("player", EntityArgument.player())
+                                .then(argument("amount", IntegerArgumentType.integer(0))
                                         .executes((source) -> {
                                             int amount = IntegerArgumentType.getInteger(source, "amount");
                                             ServerPlayer target = EntityArgument.getPlayer(source, "player");
@@ -40,9 +42,9 @@ public class GiveLife {
                                         })
                                 )
                         )
-                ).then(Commands.literal("add").requires((p) -> p.hasPermission(2))
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .then(Commands.argument("amount", IntegerArgumentType.integer(1))
+                ).then(literal("add").requires((p) -> p.hasPermission(2))
+                        .then(argument("player", EntityArgument.player())
+                                .then(argument("amount", IntegerArgumentType.integer(1))
                                         .executes((source) -> {
                                                     int amount = IntegerArgumentType.getInteger(source, "amount");
                                                     ServerPlayer target = EntityArgument.getPlayer(source, "player");

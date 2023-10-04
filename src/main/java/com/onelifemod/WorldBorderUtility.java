@@ -11,11 +11,11 @@ public class WorldBorderUtility {
     public static final String objectiveName = "WorldGenerated";
     public static void GenerateWorldBorder(ServerPlayer player) {
         ServerLevel level = player.getLevel();
-                Scoreboard levelBoard = level.getScoreboard();
+        Scoreboard levelBoard = level.getScoreboard();
         if (!levelBoard.getObjectiveNames().contains(objectiveName)) {
-            player.getLevel().getWorldBorder().setCenter(player.position().x,player.position().z);
+            player.getLevel().getWorldBorder().setCenter(player.position().x, player.position().z);
             player.getLevel().getWorldBorder().setSize(Config.startingWorldBorderSize.get());
-            level.getScoreboard().addObjective(objectiveName, ObjectiveCriteria.DUMMY, Component.literal(objectiveName), ObjectiveCriteria.RenderType.INTEGER);
+            levelBoard.addObjective(objectiveName, ObjectiveCriteria.DUMMY, Component.literal(objectiveName), ObjectiveCriteria.RenderType.INTEGER);
         }
     }
 }

@@ -51,8 +51,7 @@ public class LifeUtility {
         if(amount==1){
             board.addPlayerToTeam(name, GetTeam(board, TeamNames.Red));
         }
-
-        p.level.getScoreboard().getOrCreatePlayerScore(p.getName().getString(), p.getLevel().getScoreboard().getOrCreateObjective(LifeUtility.objectiveName)).setScore(amount);
+        board.getOrCreatePlayerScore(name, board.getOrCreateObjective(LifeUtility.objectiveName)).setScore(amount);
         data.putInt(tagName, amount);
     }
 

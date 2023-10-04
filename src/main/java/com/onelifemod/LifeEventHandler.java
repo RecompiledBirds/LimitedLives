@@ -62,7 +62,7 @@ public class LifeEventHandler {
 
             }
             if (!levelBoard.getObjectiveNames().contains(objectiveName))
-                level.getScoreboard().addObjective(objectiveName, ObjectiveCriteria.DUMMY, Component.literal(objectiveName), ObjectiveCriteria.RenderType.INTEGER);
+               levelBoard.addObjective(objectiveName, ObjectiveCriteria.DUMMY, Component.literal(objectiveName), ObjectiveCriteria.RenderType.INTEGER);
             levelBoard.getOrCreatePlayerScore(name, levelBoard.getOrCreateObjective(objectiveName)).setScore(Config.maxLives.get());
             levelBoard.setDisplayObjective(1, levelBoard.getObjective(objectiveName));
             levelBoard.addPlayerToTeam(name, GetTeam(levelBoard, TeamNames.Green));
