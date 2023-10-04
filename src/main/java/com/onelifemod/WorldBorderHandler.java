@@ -12,10 +12,11 @@ public class WorldBorderHandler {
     @SubscribeEvent
     public void TickCounterHandler(TickEvent.PlayerTickEvent event){
         if(!event.side.isServer())return;
+        if(!Config.worldBorderExpands.get())return;
         ServerPlayer player = (ServerPlayer)event.player;
         ServerLevel level = player.getLevel();
         boolean dayPassed =event.player.level.getGameTime()%(23999L *Config.daysBetweenExpansion.get())==0;
-        if(!dayPassed||!Config.worldBorderExpands.get()||!(Config.worldBorderExpansionMode.get()== Config.WorldBorderMode.Day||Config.worldBorderExpansionMode.get()== Config.WorldBorderMode.Both))return;
+        if(!dayPassed||!(Config.worldBorderExpansionMode.get()== Config.WorldBorderMode.Day||Config.worldBorderExpansionMode.get()== Config.WorldBorderMode.Both))return;
         Config.WorldBorderMode mode= Config.worldBorderExpansionMode.get();
         double size = level.getWorldBorder().getSize();
         size+= mode== Config.WorldBorderMode.Day? Config.worldBorderExpansionSize.get():Config.worldBorderExpansionSizePerDay.get();
@@ -35,6 +36,7 @@ public class WorldBorderHandler {
 
     @SubscribeEvent
     public void SpawnHandler(EntityJoinLevelEvent event){
+        if(!Config.SetDefaultBorderSize())return;
         if(event.getEntity().level.isClientSide)return;
         if(!(event.getEntity() instanceof Player))return;
 
