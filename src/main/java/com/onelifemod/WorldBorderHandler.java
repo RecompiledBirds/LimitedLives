@@ -9,12 +9,22 @@ import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class WorldBorderHandler {
+    //We cant have a config loaded during EntityJoinLevel, so we need to have this...
+    //This is not good.
     @SubscribeEvent
     public void TickCounterHandler(TickEvent.PlayerTickEvent event){
         if(!event.side.isServer())return;
         if(!Config.worldBorderExpands.get())return;
         ServerPlayer player = (ServerPlayer)event.player;
         ServerLevel level = player.getLevel();
+        //first time creation logic
+        if(Config.SetDefaultBorderSize()){
+            WorldBorderUtility.GenerateWorldBorder(player);
+        }
+
+
+
+        //days passed logic
         boolean dayPassed =event.player.level.getGameTime()%(23999L *Config.daysBetweenExpansion.get())==0;
         if(!dayPassed||!(Config.worldBorderExpansionMode.get()== Config.WorldBorderMode.Day||Config.worldBorderExpansionMode.get()== Config.WorldBorderMode.Both))return;
         Config.WorldBorderMode mode= Config.worldBorderExpansionMode.get();
@@ -36,11 +46,7 @@ public class WorldBorderHandler {
 
     @SubscribeEvent
     public void SpawnHandler(EntityJoinLevelEvent event){
-        if(!Config.SetDefaultBorderSize())return;
-        if(event.getEntity().level.isClientSide)return;
-        if(!(event.getEntity() instanceof Player))return;
 
-        WorldBorderUtility.GenerateWorldBorder((ServerPlayer)event.getEntity());
     }
 
 }

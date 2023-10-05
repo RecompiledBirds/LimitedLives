@@ -39,11 +39,14 @@ public class LifeEventHandler {
         p.displayClientMessage(Component.literal("You have " + livesLeft + " lives remaining..."), false);
     }
 
+
+    //We cant have a config loaded during EntityJoinLevel, so we need to have this...
+    //This is not good.
     @SubscribeEvent
-    public void HandleJoinedPlayer(EntityJoinLevelEvent event){
-        if(!Config.useLivesSystem.get())return;
-        if(event.getEntity().level.isClientSide)return;
-        if(!(event.getEntity() instanceof ServerPlayer player))return;
+    public void HandlePlayerTick(TickEvent.PlayerTickEvent event){
+      //  if(!Config.useLivesSystem.get())return;
+        if(event.side.isClient())return;
+        if(!(event.player instanceof ServerPlayer player))return;
 
         CompoundTag data = CoreUtils.GetPersistentTag(player);
         if (data.contains(connectedBefore) || data.getBoolean(connectedBefore)) return;
@@ -72,7 +75,6 @@ public class LifeEventHandler {
     }
     @SubscribeEvent
     public void RegisterCMDS(RegisterCommandsEvent event){
-        if(!Config.useLivesSystem.get())return;
         GiveLife.register(event.getDispatcher());
     }
 }

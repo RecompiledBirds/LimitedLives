@@ -10,6 +10,7 @@ import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 public class WorldBorderUtility {
     public static final String objectiveName = "WorldGenerated";
     public static void GenerateWorldBorder(ServerPlayer player) {
+
         ServerLevel level = player.getLevel();
         Scoreboard levelBoard = level.getScoreboard();
         if (!levelBoard.getObjectiveNames().contains(objectiveName)) {

@@ -25,7 +25,7 @@ public class Config {
     public Config(ForgeConfigSpec.Builder builder){
         builder.comment("Settings:").push("general");
         builder.push("World border settings");
-        setWorldBorderSize= builder.comment("Set world border size (is true if border expands:").define("SetWBSize",false);
+        setWorldBorderSize= builder.comment("Set world border size (is true if border expands):").define("SetWBSize",false);
         worldBorderExpands= builder.comment("World border expands:").define("WBExpands",false);
         worldBorderExpansionMode=builder.comment("World border expansion mode (XP/Day/Both)").define("WBEMode",WorldBorderMode.XP);
         worldBorderExpansionSize=builder.comment("Expansion amount (when using XP or per day").define("WBEAmount",4);
