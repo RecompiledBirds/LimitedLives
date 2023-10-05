@@ -34,7 +34,7 @@ public class Config {
         startingWorldBorderSize=builder.comment("Starting world border size").define("WBSize",16);
         builder.pop();
         builder.push("Life settings");
-        setWorldBorderSize= builder.comment("Use lives system").define("UseLives",true);
+        useLivesSystem= builder.comment("Use lives system").define("UseLives",true);
         maxLives= builder.comment("Maximum amount of lives:").define("MaxLives",5);
         builder.pop();
         builder.build();

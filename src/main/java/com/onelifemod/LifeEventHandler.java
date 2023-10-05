@@ -18,6 +18,8 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static com.onelifemod.LifeUtility.*;
+import static com.onelifemod.LifeUtility.TeamNames.*;
+import static net.minecraft.ChatFormatting.*;
 
 public class LifeEventHandler {
 
@@ -53,19 +55,19 @@ public class LifeEventHandler {
         if (FirstTimeConnection(player, data)) {
             data.putBoolean(connectedBefore, true);
             if (levelBoard.getPlayerTeams().isEmpty()) {
-                PlayerTeam green = level.getScoreboard().addPlayerTeam(TeamNames.Green.toString());
-                green.setColor(ChatFormatting.GREEN);
-                PlayerTeam yellow = level.getScoreboard().addPlayerTeam(TeamNames.Yellow.toString());
-                yellow.setColor(ChatFormatting.YELLOW);
-                PlayerTeam red = level.getScoreboard().addPlayerTeam(TeamNames.Red.toString());
-                red.setColor(ChatFormatting.RED);
+                PlayerTeam green = level.getScoreboard().addPlayerTeam(Green.toString());
+                green.setColor(GREEN);
+                PlayerTeam yellow = level.getScoreboard().addPlayerTeam(Yellow.toString());
+                yellow.setColor(YELLOW);
+                PlayerTeam red = level.getScoreboard().addPlayerTeam(Red.toString());
+                red.setColor(RED);
 
             }
             if (!levelBoard.getObjectiveNames().contains(objectiveName))
                levelBoard.addObjective(objectiveName, ObjectiveCriteria.DUMMY, Component.literal(objectiveName), ObjectiveCriteria.RenderType.INTEGER);
             levelBoard.getOrCreatePlayerScore(name, levelBoard.getOrCreateObjective(objectiveName)).setScore(Config.maxLives.get());
             levelBoard.setDisplayObjective(1, levelBoard.getObjective(objectiveName));
-            levelBoard.addPlayerToTeam(name, GetTeam(levelBoard, TeamNames.Green));
+            levelBoard.addPlayerToTeam(name, GetTeam(levelBoard, Green));
         }
     }
     @SubscribeEvent

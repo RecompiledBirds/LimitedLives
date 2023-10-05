@@ -25,8 +25,8 @@ public class onelifemod {
         MinecraftForge.EVENT_BUS.register(new WorldBorderHandler());
 
         ForgeConfigSpec.Builder clientBuilder = new ForgeConfigSpec.Builder();
-        Config config = new Config(clientBuilder);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, clientBuilder.build());
+        Config config = new Config(clientBuilder);
 
     }
 }
