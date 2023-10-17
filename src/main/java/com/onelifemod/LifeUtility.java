@@ -55,6 +55,14 @@ public class LifeUtility {
         data.putInt(tagName, amount);
     }
 
+    public static int GetLives(ServerPlayer p){
+        CompoundTag data = CoreUtils.GetPersistentTag(p);
+        if (!data.contains(tagName)) {
+            data.putInt(tagName, Config.maxLives.get());
+        }
+        return data.getInt(tagName);
+    }
+
     public enum TeamNames {
         Green,
         Yellow,

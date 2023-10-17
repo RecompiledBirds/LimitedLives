@@ -1,5 +1,6 @@
 package com.onelifemod;
 
+import net.minecraftforge.client.event.ContainerScreenEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class Config {
@@ -18,6 +19,9 @@ public class Config {
     public static ForgeConfigSpec.ConfigValue<Integer> maxLives;
     public static ForgeConfigSpec.ConfigValue<Boolean> useLivesSystem;
 
+    public static ForgeConfigSpec.ConfigValue<Integer> maxBorderSize;
+    public static ForgeConfigSpec.ConfigValue<Integer> minBorderSize;
+
     public static Boolean SetDefaultBorderSize(){
         return setWorldBorderSize.get()||worldBorderExpands.get();
     }
@@ -27,11 +31,13 @@ public class Config {
         builder.push("World border settings");
         setWorldBorderSize= builder.comment("Set world border size (is true if border expands):").define("SetWBSize",false);
         worldBorderExpands= builder.comment("World border expands:").define("WBExpands",false);
-        worldBorderExpansionMode=builder.comment("World border expansion mode (XP/Day/Both)").define("WBEMode",WorldBorderMode.XP);
+        worldBorderExpansionMode=builder.comment("World border expansion mode (XP/Day/Both)").define("WBEMode",WorldBorderMode.Day);
         worldBorderExpansionSize=builder.comment("Expansion amount (when using XP or per day").define("WBEAmount",4);
         worldBorderExpansionSizePerDay=builder.comment("Expansion amount (When using Both)").define("WBEAmountBothPerDay",1);
         daysBetweenExpansion=builder.comment("Days between expansions").define("WBExpansionDays",2);
         startingWorldBorderSize=builder.comment("Starting world border size").define("WBSize",16);
+        maxBorderSize=builder.comment("Max world border size. -1 for off.").define("MaxWBSize",-1);
+        minBorderSize=builder.comment("Min world border size. -1 for off.").define("MinWBSize",-1);
         builder.pop();
         builder.push("Life settings");
         useLivesSystem= builder.comment("Use lives system").define("UseLives",true);

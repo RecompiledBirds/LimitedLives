@@ -35,6 +35,10 @@ public class GiveLife {
                                 .then(argument("amount", IntegerArgumentType.integer(0))
                                         .executes((source) -> {
                                             int amount = IntegerArgumentType.getInteger(source, "amount");
+                                            if(amount-1>LifeUtility.GetLives(source.getSource().getPlayer())){
+                                                source.getSource().sendFailure(Component.literal("You don't have enough extra lives."));
+                                                return 0;
+                                            }
                                             ServerPlayer target = EntityArgument.getPlayer(source, "player");
                                             LifeUtility.SetLives(target, amount);
                                             source.getSource().sendSuccess(Component.literal("Set " + target.getName().getString() + " lives to " + amount), true);
