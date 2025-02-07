@@ -27,6 +27,10 @@ public class Config {
     public static ForgeConfigSpec.ConfigValue<Boolean> damageCausesMaxHPLoss;
 
     public static ForgeConfigSpec.ConfigValue<Boolean> useHPLives;
+    public static ForgeConfigSpec.ConfigValue<Boolean> hideLivesCounter;
+    public static ForgeConfigSpec.ConfigValue<Boolean> randomizeGameSettings;
+    public static ForgeConfigSpec.ConfigValue<Integer> maxRandomLifeAmount;
+    public static ForgeConfigSpec.ConfigValue<Integer> minRandomLifeAmount;
 
     public static Boolean SetDefaultBorderSize(){
         return setWorldBorderSize.get()||worldBorderExpands.get();
@@ -40,7 +44,7 @@ public static ForgeConfigSpec.ConfigValue<Boolean> showTeams;
         return maxLives.get();
     }
     public Config(ForgeConfigSpec.Builder builder){
-        builder.comment("Settings:").push("general");
+        builder.comment("Default gamerule settings").push("general");
         builder.push("World border settings");
         setWorldBorderSize= builder.comment("Set world border size (is true if border expands):").define("SetWBSize",false);
         worldBorderExpands= builder.comment("World border expands:").define("WBExpands",false);
@@ -54,6 +58,7 @@ public static ForgeConfigSpec.ConfigValue<Boolean> showTeams;
         builder.pop();
         builder.push("Life settings");
         useLivesSystem= builder.comment("Use lives system").define("UseLives",true);
+        hideLivesCounter=builder.comment("Hide Lives Counter").define("HideLives",true);
         maxLives= builder.comment("Default amount of lives:").define("Default",5);
         livesSharedBetweenAllPlayers=builder.comment("All players share the same life count").define("LivesSharedAll",false);
         builder.push("Team settings");
@@ -71,7 +76,11 @@ public static ForgeConfigSpec.ConfigValue<Boolean> showTeams;
         builder.push("Gaining Lives");
         allowGainingLivesThroughTamingAnimals=builder.comment("Allow players to gain lives through taming (increasing amounts) of animals").define("AllowNewLivesFromTaming",true);
         advancementsGiveLives=builder.comment("An increasing amount of advancements gives lives.").define("AdvancementGiveLives",true);
-
+        builder.pop();
+        builder.comment("Caution: The following settings will ignore any non-clientside setting!").push("RandomizerSettings");
+        randomizeGameSettings=builder.comment("Randomize these settings per world. Ignores most of this file.").define("RandomizeSettings",true);
+        maxRandomLifeAmount=builder.comment("The max amount of lives that can be randomly assigned").define("MaxRandLifeAmount",5);
+        minRandomLifeAmount=builder.comment("The min amount of lives that can be randomly assigned").define("MinRandLifeAmount",1);
         builder.pop();
         builder.pop();
         builder.build();

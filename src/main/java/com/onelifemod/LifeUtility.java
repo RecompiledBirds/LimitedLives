@@ -8,15 +8,12 @@ import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Score;
 import net.minecraft.world.scores.Scoreboard;
-import net.minecraftforge.client.event.RenderTooltipEvent;
-import org.apache.logging.log4j.Level;
-import recompiled.core.LogUtils;
 import recompiled.core.ScoreBoardUtils;
 
 import static com.onelifemod.LifeUtility.TeamNames.*;
 
 public class LifeUtility {
-    public static final String objectiveName = "LLM.Lives";
+    public static final String objectiveName = "Lives";
     public static boolean FirstTimeConnection(ServerPlayer player) {
         Scoreboard board = ScoreBoardUtils.GetOrSetScoreBoard(player);
         return !board.hasPlayerScore(GetNameForBoard(player),LifeObjective(board));
@@ -28,7 +25,7 @@ public class LifeUtility {
         Score score=GetLifeScore(board,p);
         String name =  GetNameForBoard(p);
         if(!board.hasPlayerScore(name,LifeObjective(board))){
-            int res = Config.GetMaxLives()+amount;
+            int res = GameRuleHelper.MaxLives(p.serverLevel())+amount;
             score.setScore(res);
             return res;
         }
@@ -56,7 +53,7 @@ public class LifeUtility {
         return SetLives(p,amount,board,score);
     }
     public static String GetNameForBoard(ServerPlayer p){
-        if(Config.livesSharedBetweenAllPlayers.get()){
+        if(GameRuleHelper.LivesSharedBetweenAllPlayers(p.serverLevel())){
             return "Shared Lives";
         }
         return p.getName().getString();
@@ -66,13 +63,13 @@ public class LifeUtility {
         String name = GetNameForBoard(p);
         lifeScore.setScore(amount);
 
-        double upperbound = (double) (Config.GetMaxLives() / 2) + 1.0;
-        if(!Config.showTeams.get())
+        double upperbound = (double) (GameRuleHelper.MaxLives(p.serverLevel()) / 2) + 1.0;
+        if(!GameRuleHelper.ShowTeams(p.serverLevel()))
             return lifeScore.getScore();
         if (amount >= upperbound) {
             board.addPlayerToTeam(name, GetTeam(board, TeamNames.Green));
         }
-        if (amount <= upperbound && amount >= (double) (Config.maxLives.get() / 2) - 1.0) {
+        if (amount <= upperbound && amount >= (double) (GameRuleHelper.MaxLives(p.serverLevel()) / 2) - 1.0) {
             board.addPlayerToTeam(name, GetTeam(board, TeamNames.Yellow));
         }
         if (amount == 1) {
@@ -115,19 +112,19 @@ public class LifeUtility {
     public static PlayerTeam GetTeam(Scoreboard scoreboard, TeamNames name) {
         PlayerTeam team =  scoreboard.getPlayerTeam(name.toString());
         if (team!=null)return team;
-        switch (name){
-            case Yellow:
-                team=scoreboard.addPlayerTeam(Yellow.toString());
+        switch (name) {
+            case Yellow -> {
+                team = scoreboard.addPlayerTeam(Yellow.toString());
                 team.setColor(ChatFormatting.YELLOW);
-                break;
-            case Green:
-                team=scoreboard.addPlayerTeam(Green.toString());
+            }
+            case Green -> {
+                team = scoreboard.addPlayerTeam(Green.toString());
                 team.setColor(ChatFormatting.GREEN);
-                break;
-            case Red:
-                team=scoreboard.addPlayerTeam(Red.toString());
+            }
+            case Red -> {
+                team = scoreboard.addPlayerTeam(Red.toString());
                 team.setColor(ChatFormatting.RED);
-                break;
+            }
         }
         return team;
     }

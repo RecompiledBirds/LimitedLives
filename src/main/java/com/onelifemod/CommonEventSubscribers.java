@@ -1,5 +1,6 @@
 package com.onelifemod;
 
+import net.minecraft.world.level.GameRules;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import recompiled.core.LogUtils;
 
@@ -13,6 +14,9 @@ public class CommonEventSubscribers {
         event.enqueueWork(()->{
            LogUtils.GetLogger(limitedLives.MOD_ID).log(Level.INFO,"Registering packets");
             LifeSimpleChannel.register();
+            LogUtils.GetLogger(limitedLives.MOD_ID).log(Level.INFO,"Registering game rules");
+            LifeRules.register();
         });
+
     }
 }
