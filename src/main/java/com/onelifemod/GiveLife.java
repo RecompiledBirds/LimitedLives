@@ -8,6 +8,8 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.function.Supplier;
+
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
@@ -21,10 +23,14 @@ public class GiveLife {
                                                     int amount = IntegerArgumentType.getInteger(source, "amount");
                                                     ServerPlayer sourcePlayer = source.getSource().getPlayer();
                                                     ServerPlayer target = EntityArgument.getPlayer(source, "player");
-
+                                                    if(amount-1>LifeUtility.GetLives(sourcePlayer)){
+                                                        source.getSource().sendFailure(Component.literal("You don't have enough extra lives."));
+                                                        return 0;
+                                                    }
                                                     LifeUtility.ModifyPlayerLives(sourcePlayer, -amount);
-                                            LifeUtility.ModifyPlayerLives(target, amount);
-                                                    source.getSource().sendSuccess(Component.literal("Gave " + target.getName().getString() + " " + amount + (amount > 1 ? " lives" : " life") + "."), true);
+                                                    LifeUtility.ModifyPlayerLives(target, amount);
+                                                    Supplier<Component> s = () -> Component.literal("Gave " + target.getName().getString() + " " + amount + (amount !=1 ? " lives" : " life") + ".");
+                                                    source.getSource().sendSuccess( s, true);
                                                     return 0;
                                                 }
                                         )
@@ -35,31 +41,43 @@ public class GiveLife {
                                 .then(argument("amount", IntegerArgumentType.integer(0))
                                         .executes((source) -> {
                                             int amount = IntegerArgumentType.getInteger(source, "amount");
-                                            if(amount-1>LifeUtility.GetLives(source.getSource().getPlayer())){
-                                                source.getSource().sendFailure(Component.literal("You don't have enough extra lives."));
-                                                return 0;
-                                            }
+
                                             ServerPlayer target = EntityArgument.getPlayer(source, "player");
                                             LifeUtility.SetLives(target, amount);
-                                            source.getSource().sendSuccess(Component.literal("Set " + target.getName().getString() + " lives to " + amount), true);
+                                            Supplier<Component> s = () -> Component.literal("Set " + target.getName().getString() + " lives to " + amount);
+                                            source.getSource().sendSuccess(s, true);
                                             return 0;
                                         })
                                 )
                         )
                 ).then(literal("add").requires((p) -> p.hasPermission(2))
                         .then(argument("player", EntityArgument.player())
-                                .then(argument("amount", IntegerArgumentType.integer(1))
+                                .then(argument("amount", IntegerArgumentType.integer())
                                         .executes((source) -> {
                                                     int amount = IntegerArgumentType.getInteger(source, "amount");
                                                     ServerPlayer target = EntityArgument.getPlayer(source, "player");
                                                     LifeUtility.ModifyPlayerLives(target, amount);
-                                                    source.getSource().sendSuccess(Component.literal("Gave " + target.getName().getString() + " " + amount + (amount > 1 ? " lives" : " life") + "."), true);
+                                                    String amountStr=String.valueOf(amount);
+                                                    Supplier<Component> s = () -> Component.literal("Gave " + target.getName().getString() + " " + amountStr + (amount > 1 ? " lives" : " life") + ".");
+                                                    source.getSource().sendSuccess(s, true);
                                                     return 0;
                                                 }
                                         )
                                 )
                         )
+                ).then(literal("test").requires((p)->p.hasPermission(2))
+                .then(literal("giveLifePacket")
+                .executes((source)->{
+                    ServerPlayer target = source.getSource().getPlayer();
+                    LifeSimpleChannel.SendGiveLifePacketToPlayer(target);
+                            Supplier<Component> s = () -> Component.literal("Sent you a test packet!");
+                    source.getSource().sendSuccess(s, true);
+                    return 0;
+                }
+                )
+                )
                 )
         );
+
     }
 }

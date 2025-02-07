@@ -1,11 +1,11 @@
-package com.onelifemod;
+package recompiled.core;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 
-public class CoreUtils {
-    public static final String persistName = "PlayerPersisted";
-    public static final String persistTagName = "DeathData";
+public class TagUtils {
+    public static final String persistName = "RecompiledCore.PlayerPersisted";
+    public static final String persistTagName = "RecompiledCore.DeathData";
     public static CompoundTag GetPersistentTag(LivingEntity e) {
         CompoundTag persistData = e.getPersistentData().getCompound(persistName);
         e.getPersistentData().put("PlayerPersisted", persistData);

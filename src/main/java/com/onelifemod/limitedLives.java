@@ -9,21 +9,26 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(onelifemod.MODID)
-public class onelifemod {
+@Mod(limitedLives.MOD_ID)
+public class limitedLives {
     // Define mod id in a common place for everything to reference
-    public static final String MODID = "onelifemod";
-    // Directly reference a slf4j logger
+    public static final String MOD_ID = "limitedlives";
 
 
-    public onelifemod() {
+    public limitedLives() {
+
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonEventSubscribers::DoCommonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(new LifeEventHandler());
+        MinecraftForge.EVENT_BUS.register(new PositiveLifeEventHandler());
         MinecraftForge.EVENT_BUS.register(new WorldBorderHandler());
         ForgeConfigSpec.Builder clientBuilder = new ForgeConfigSpec.Builder();
+
+
         Config config = new Config(clientBuilder);
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, clientBuilder.build());
 
     }
