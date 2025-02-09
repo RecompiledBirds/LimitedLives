@@ -1,5 +1,6 @@
-package com.onelifemod;
+package com.onelifemod.lives;
 
+import com.onelifemod.Config;
 import net.minecraft.world.level.GameRules;
 
 public class LifeRules {

@@ -1,6 +1,8 @@
 package com.onelifemod;
 
-import net.minecraft.world.level.GameRules;
+import com.onelifemod.lives.LifeRules;
+import com.onelifemod.lives.LifeSimpleChannel;
+import com.onelifemod.worldborders.WBRules;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import recompiled.core.LogUtils;
 
@@ -16,6 +18,7 @@ public class CommonEventSubscribers {
             LifeSimpleChannel.register();
             LogUtils.GetLogger(limitedLives.MOD_ID).log(Level.INFO,"Registering game rules");
             LifeRules.register();
+            WBRules.register();
         });
 
     }

@@ -1,5 +1,7 @@
-package com.onelifemod;
+package com.onelifemod.lives;
 
+import com.onelifemod.Config;
+import com.onelifemod.limitedLives;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;

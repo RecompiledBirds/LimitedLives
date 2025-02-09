@@ -1,5 +1,7 @@
-package com.onelifemod;
+package com.onelifemod.lives;
 
+import com.onelifemod.common.GameRuleHelper;
+import com.onelifemod.limitedLives;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -8,9 +10,11 @@ import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Score;
 import net.minecraft.world.scores.Scoreboard;
+import org.apache.logging.log4j.Level;
+import recompiled.core.LogUtils;
 import recompiled.core.ScoreBoardUtils;
 
-import static com.onelifemod.LifeUtility.TeamNames.*;
+import static com.onelifemod.lives.LifeUtility.TeamNames.*;
 
 public class LifeUtility {
     public static final String objectiveName = "Lives";
@@ -19,7 +23,10 @@ public class LifeUtility {
         return !board.hasPlayerScore(GetNameForBoard(player),LifeObjective(board));
     }
 
-
+    public static int ModifyPlayerLives(ServerPlayer p, int amount,String LogName){
+        LogUtils.GetLogger(limitedLives.MOD_ID).log(Level.INFO,LogName);
+        return ModifyPlayerLives(p,amount);
+    }
     public static int ModifyPlayerLives(ServerPlayer p, int amount){
         Scoreboard board = ScoreBoardUtils.GetOrSetScoreBoard(p);
         Score score=GetLifeScore(board,p);

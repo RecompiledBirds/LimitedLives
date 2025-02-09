@@ -1,5 +1,7 @@
 package com.onelifemod;
 
+import com.onelifemod.lives.eventListeners.*;
+import com.onelifemod.worldborders.WorldBorderHandler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -23,6 +25,9 @@ public class limitedLives {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(new LifeEventHandler());
         MinecraftForge.EVENT_BUS.register(new PositiveLifeEventHandler());
+        MinecraftForge.EVENT_BUS.register(new HealthEventHandler());
+        MinecraftForge.EVENT_BUS.register(new LivesDeathHandler());
+        MinecraftForge.EVENT_BUS.register(new LoginHandler());
         MinecraftForge.EVENT_BUS.register(new WorldBorderHandler());
         ForgeConfigSpec.Builder clientBuilder = new ForgeConfigSpec.Builder();
 

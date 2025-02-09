@@ -1,8 +1,10 @@
-package com.onelifemod;
+package com.onelifemod.lives;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.onelifemod.lives.LifeSimpleChannel;
+import com.onelifemod.lives.LifeUtility;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
@@ -13,7 +15,7 @@ import java.util.function.Supplier;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
-public class GiveLife {
+public class LifeCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralCommandNode<CommandSourceStack> cmd = dispatcher.register(literal("life")
                 .then(literal("give")
@@ -23,7 +25,7 @@ public class GiveLife {
                                                     int amount = IntegerArgumentType.getInteger(source, "amount");
                                                     ServerPlayer sourcePlayer = source.getSource().getPlayer();
                                                     ServerPlayer target = EntityArgument.getPlayer(source, "player");
-                                                    if(amount-1>LifeUtility.GetLives(sourcePlayer)){
+                                                    if(amount-1> LifeUtility.GetLives(sourcePlayer)){
                                                         source.getSource().sendFailure(Component.literal("You don't have enough extra lives."));
                                                         return 0;
                                                     }

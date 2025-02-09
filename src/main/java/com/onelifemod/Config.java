@@ -2,6 +2,9 @@ package com.onelifemod;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Config {
     public enum WorldBorderMode{
         XP,
@@ -32,10 +35,14 @@ public class Config {
     public static ForgeConfigSpec.ConfigValue<Integer> maxRandomLifeAmount;
     public static ForgeConfigSpec.ConfigValue<Integer> minRandomLifeAmount;
 
+    public static ForgeConfigSpec.ConfigValue<Boolean> chaosInABox;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> mobsThatGiveLifeWhenKilled;
     public static Boolean SetDefaultBorderSize(){
         return setWorldBorderSize.get()||worldBorderExpands.get();
     }
-
+    public static ForgeConfigSpec.ConfigValue<Boolean> shuffleSettings;
+    public static ForgeConfigSpec.ConfigValue<Integer> wbExpansionPerKill;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> mobsThatExpandWBWhenKilled;
 public static ForgeConfigSpec.ConfigValue<Boolean> showTeams;
     public static int GetMaxLives(){
         if(useHPLives.get()){
@@ -54,7 +61,9 @@ public static ForgeConfigSpec.ConfigValue<Boolean> showTeams;
         daysBetweenExpansion=builder.comment("Days between expansions").define("WBExpansionDays",2);
         startingWorldBorderSize=builder.comment("Starting world border size").define("WBSize",16);
         maxBorderSize=builder.comment("Max world border size. -1 for off.").define("MaxWBSize",-1);
-        minBorderSize=builder.comment("Min world border size. -1 for off.").define("MinWBSize",-1);
+        minBorderSize=builder.comment("Min world border size.").define("MinWBSize",1);
+        wbExpansionPerKill=builder.comment("Amount of world border expansions per kill.").define("WBExpansionPerKill",1);
+        mobsThatExpandWBWhenKilled=builder.defineList("MobsThatExpandWBWhenKilled", Arrays.asList("minecraft:wither","minecraft:ender_dragon"),li->li instanceof String);
         builder.pop();
         builder.push("Life settings");
         useLivesSystem= builder.comment("Use lives system").define("UseLives",true);
@@ -76,11 +85,14 @@ public static ForgeConfigSpec.ConfigValue<Boolean> showTeams;
         builder.push("Gaining Lives");
         allowGainingLivesThroughTamingAnimals=builder.comment("Allow players to gain lives through taming (increasing amounts) of animals").define("AllowNewLivesFromTaming",true);
         advancementsGiveLives=builder.comment("An increasing amount of advancements gives lives.").define("AdvancementGiveLives",true);
+        mobsThatGiveLifeWhenKilled=builder.defineList("MobsThatGiveLifeWhenKilled", Arrays.asList("minecraft:wither","minecraft:ender_dragon"),li->li instanceof String);
         builder.pop();
         builder.comment("Caution: The following settings will ignore any non-clientside setting!").push("RandomizerSettings");
         randomizeGameSettings=builder.comment("Randomize these settings per world. Ignores most of this file.").define("RandomizeSettings",true);
         maxRandomLifeAmount=builder.comment("The max amount of lives that can be randomly assigned").define("MaxRandLifeAmount",5);
         minRandomLifeAmount=builder.comment("The min amount of lives that can be randomly assigned").define("MinRandLifeAmount",1);
+        chaosInABox=builder.comment("Randomize WorldBorderSettings").define("ChaosInABox",false);
+        builder.pop();
         builder.pop();
         builder.pop();
         builder.build();

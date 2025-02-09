@@ -1,5 +1,7 @@
-package com.onelifemod;
+package com.onelifemod.lives.eventListeners;
 
+import com.onelifemod.common.GameRuleHelper;
+import com.onelifemod.lives.LifeUtility;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Score;
@@ -38,7 +40,7 @@ public class PositiveLifeEventHandler {
         }
         requiredTamedScore.setScore((reqScore) + 1);
         tamedScore.setScore(0);
-        LifeUtility.ModifyPlayerLives(player, 1);
+        LifeUtility.ModifyPlayerLives(player, 1,"TamedAnimal");
     }
 
     @SubscribeEvent
@@ -68,6 +70,6 @@ public class PositiveLifeEventHandler {
         }
         requiredAdvancementScore.setScore(required + 3);
         advancementScore.setScore(0);
-        LifeUtility.ModifyPlayerLives(player, 1);
+        LifeUtility.ModifyPlayerLives(player, 1,"HandleAdvancement");
     }
 }
