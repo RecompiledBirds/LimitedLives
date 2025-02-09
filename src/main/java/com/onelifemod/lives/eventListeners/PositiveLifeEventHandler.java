@@ -11,6 +11,8 @@ import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import recompiled.core.ScoreBoardUtils;
 
+import java.util.function.Function;
+
 public class PositiveLifeEventHandler {
     @SubscribeEvent()
     public void HandleAnimalTamed(AnimalTameEvent event) {
@@ -19,28 +21,29 @@ public class PositiveLifeEventHandler {
         if (!GameRuleHelper.AllowGainingLivesThroughTamingAnimals(player.serverLevel())) {
             return;
         }
+        GetScore("LLM.TamedAnimals",player,(input)->input+1);
+    }
+
+    private void GetScore(String objectiveName, ServerPlayer player, Function<Integer,Integer> changeValueFunction) {
         Scoreboard board = ScoreBoardUtils.GetOrSetScoreBoard(player);
-        String name = LifeUtility.GetNameForBoard(player);
+        String playerName = LifeUtility.GetNameForBoard(player);
+        Objective currentObj = board.getOrCreateObjective(objectiveName);
 
-        Objective tamedObjective = board.getOrCreateObjective("tamedAnimals");
+        Score currentScore = board.getOrCreatePlayerScore(playerName, currentObj);
 
-        Score tamedScore = board.getOrCreatePlayerScore(name, tamedObjective);
+        Objective requiredScoreObjective = board.getOrCreateObjective("required" + objectiveName);
 
-        Objective requiredTamedObjective = board.getOrCreateObjective("requiredTamedAnimals");
-
-        Score requiredTamedScore = board.getOrCreatePlayerScore(name + "_requiredTamed", requiredTamedObjective);
-
-        int newTamedScore = tamedScore.getScore() + 1;
-        int reqScore = requiredTamedScore.getScore();
-
-        if (reqScore == 0) reqScore = 1;
-        if (newTamedScore < reqScore) {
-            tamedScore.setScore(newTamedScore);
+        Score requiredScore = board.getOrCreatePlayerScore(playerName + "_required" + objectiveName, requiredScoreObjective);
+        int score = currentScore.getScore() + 1;
+        int required = requiredScore.getScore();
+        if (required == 0) required = 1;
+        if (score < required) {
+            currentScore.setScore(score + 1);
             return;
         }
-        requiredTamedScore.setScore((reqScore) + 1);
-        tamedScore.setScore(0);
-        LifeUtility.ModifyPlayerLives(player, 1,"TamedAnimal");
+        requiredScore.setScore(changeValueFunction.apply(required));
+        currentScore.setScore(0);
+        LifeUtility.ModifyPlayerLives(player, 1,objectiveName);
     }
 
     @SubscribeEvent
@@ -49,27 +52,8 @@ public class PositiveLifeEventHandler {
         if (!GameRuleHelper.AdvancementsGiveLives(player.serverLevel()) || event.getAdvancement().getParent() == null || event.getAdvancement().getRewards().getRecipes().length > 0)
             return;
 
+        GetScore("LLM.AdvancementCountObjective",player,(input)->input+3);
 
-        Scoreboard board = ScoreBoardUtils.GetOrSetScoreBoard(player);
-        String name = LifeUtility.GetNameForBoard(player);
 
-        Objective advancementObjective = board.getOrCreateObjective("LLM.advancementCountObjective");
-
-        Score advancementScore = board.getOrCreatePlayerScore(name, advancementObjective);
-
-        Objective requiredAdvancementObjective = board.getOrCreateObjective("LLM.requiredAdvancementCountObjective");
-
-        Score requiredAdvancementScore = board.getOrCreatePlayerScore(name + "_AdvancementsRequiredLLM", requiredAdvancementObjective);
-
-        int score = advancementScore.getScore() + 1;
-        int required = requiredAdvancementScore.getScore();
-        if (required == 0) required = 1;
-        if (score < required) {
-            advancementScore.setScore(score + 1);
-            return;
-        }
-        requiredAdvancementScore.setScore(required + 3);
-        advancementScore.setScore(0);
-        LifeUtility.ModifyPlayerLives(player, 1,"HandleAdvancement");
     }
 }
