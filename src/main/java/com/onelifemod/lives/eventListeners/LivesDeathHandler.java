@@ -24,7 +24,7 @@ public class LivesDeathHandler {
     public void HandleDeath(LivingDeathEvent event){
         if(!(event.getEntity().level() instanceof ServerLevel level))return;
         if(!GameRuleHelper.UseLivesSystem(level))return;
-        if(event.getSource()!=null)return;
+        if(event.getSource()==null)return;
 
         if((event.getSource().getEntity() instanceof ServerPlayer killPlayer) && Config.mobsThatGiveLifeWhenKilled.get().contains(EntityType.getKey(event.getEntity().getType()).toString())){
             ModifyPlayerLives(killPlayer,1);
@@ -47,10 +47,7 @@ public class LivesDeathHandler {
             }
             return;
         }
-        if(GameRuleHelper.UseHPLives(level)){
-            return;
-        }
-        if(!GameRuleHelper.HideLivesCounter(level))
+        if(!GameRuleHelper.UseHPLives(level) && !GameRuleHelper.HideLivesCounter(level))
             p.displayClientMessage(Component.literal("You have " + livesLeft + " lives remaining..."), false);
     }
     private void SpawnLightingBoltAtPlayer(ServerPlayer player){
@@ -69,7 +66,7 @@ public class LivesDeathHandler {
         ServerPlayer p = (ServerPlayer)event.getEntity();
         if(p==null)return;
         if(GameRuleHelper.UseHPLives(p.serverLevel())){
-            p.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("health",2*(LifeUtility.GetLives(p)- 10), AttributeModifier.Operation.ADDITION));
+            p.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("health",2*(LifeUtility.GetLives(p)-10), AttributeModifier.Operation.ADDITION));
         }
         if(p.isSpectator()&&LifeUtility.GetLives(p)>0){
             p.setGameMode(GameType.SURVIVAL);

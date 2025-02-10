@@ -13,64 +13,68 @@ import recompiled.core.LogUtils;
 import java.util.Random;
 
 public class GameRuleHelper {
+
     public static boolean ShowTeams(ServerLevel level){
-        return level.getGameRules().getRule(LifeRules.showTeams).get();
+        return GetRule(level,LifeRules.showTeams).get();
     }
 
     public static boolean UseLivesSystem(ServerLevel level){
-        return level.getGameRules().getRule(LifeRules.useLives).get();
+        return GetRule(level,LifeRules.useLives).get();
     }
 
     public static boolean LivesSharedBetweenAllPlayers(ServerLevel level){
-        return level.getGameRules().getRule(LifeRules.allPlayersShareLives).get();
+        return GetRule(level,LifeRules.allPlayersShareLives).get();
     }
 
     public static boolean UseHPLives(ServerLevel level){
-        return level.getGameRules().getRule(LifeRules.useHPLives).get();
+        return GetRule(level,LifeRules.useHPLives).get();
     }
     public static int GetWBExpansionOnMobKill(ServerLevel level){
-        return level.getGameRules().getRule(WBRules.WBExpansionPerKill).get();
+        return GetRule(level,WBRules.WBExpansionPerKill).get();
     }
 
     public static boolean HealthSharedBetweenAllPlayers(ServerLevel level){
-        return level.getGameRules().getRule(LifeRules.allPlayersShareHP).get();
+        return GetRule(level,LifeRules.allPlayersShareHP).get();
     }
 
     public static boolean DamageCausesMaxHPLoss(ServerLevel level){
-        return level.getGameRules().getRule(LifeRules.damageCausesMaxHPLoss).get();
+        return GetRule(level,LifeRules.damageCausesMaxHPLoss).get();
     }
 
     public static boolean AllowGainingLivesThroughTamingAnimals(ServerLevel level){
-        return UseLivesSystem(level) && level.getGameRules().getRule(LifeRules.tamingGivesLives).get();
+        return UseLivesSystem(level) && GetRule(level,LifeRules.tamingGivesLives).get();
     }
 
     public static boolean AdvancementsGiveLives(ServerLevel level){
-        return level.getGameRules().getRule(LifeRules.advancementsGiveLives).get();
+        return GetRule(level,LifeRules.advancementsGiveLives).get();
     }
     public static int MaxLives(ServerLevel level){
-        return  level.getGameRules().getRule(LifeRules.maxOrStartingLives).get();
+        return  GetRule(level,LifeRules.maxOrStartingLives).get();
     }
     public static boolean HideLivesCounter(ServerLevel level){
-        return level.getGameRules().getRule(LifeRules.hideLivesCounter).get();
+        return GetRule(level,LifeRules.hideLivesCounter).get();
     }
     public static boolean SetWBSize(ServerLevel level){
-        return level.getGameRules().getRule(WBRules.SetWBSize).get()||level.getGameRules().getRule(WBRules.WBExpands).get();
+        return GetRule(level,WBRules.SetWBSize).get()||GetRule(level,WBRules.WBExpands).get();
     }
     public static int GetWBDaysBetweenExpansion(ServerLevel level){
-        return level.getGameRules().getRule(WBRules.WBDaysBetweenExpansion).get();
+        return GetRule(level,WBRules.WBDaysBetweenExpansion).get();
     }
     public static int GetWBExpansionPerLevel(ServerLevel level){
-        return level.getGameRules().getRule(WBRules.WBExpansionPerLevel).get();
+        return GetRule(level, WBRules.WBExpansionPerLevel).get();
     }
 
     public static int GetWBMinSize(ServerLevel level){
-        return level.getGameRules().getRule(WBRules.WBMinSize).get();
+        return GetRule(level, WBRules.WBMinSize).get();
     }
     public static int GetWBMaxSize(ServerLevel level){
-        return level.getGameRules().getRule(WBRules.WBMaxSize).get();
+        return GetRule(level,WBRules.WBMaxSize).get();
     }
     public static int GetWBExpansionPerDay(ServerLevel level){
-        return level.getGameRules().getRule(WBRules.WBExpansionPerDay).get();
+        return GetRule(level,WBRules.WBExpansionPerDay).get();
+    }
+    public static <T extends GameRules.Value<T>> T GetRule(ServerLevel level, GameRules.Key<T> key){
+        return level.getGameRules().getRule(key);
     }
     public static Config.WorldBorderMode GetWBMode(ServerLevel level){
         int val = level.getGameRules().getRule(WBRules.WBEMode).get();
@@ -112,19 +116,24 @@ public class GameRuleHelper {
         LogUtils.GetLogger(limitedLives.MOD_ID).log(Level.INFO,"Setting "+nameForLogging+" "+newSetting);
         return newSetting;
     }
-    private static void RandomizeBooleanRule(GameRules rules, MinecraftServer server, Random random, String nameForLogging, GameRules.Key<GameRules.BooleanValue> key){
+    private static Boolean RandomizeBooleanRule(GameRules rules, MinecraftServer server, Random random, String nameForLogging, GameRules.Key<GameRules.BooleanValue> key){
         boolean newSetting = random.nextBoolean();
         rules.getRule(key).set(newSetting,server);
         LogUtils.GetLogger(limitedLives.MOD_ID).log(Level.INFO,"Setting "+nameForLogging+" "+newSetting);
+        return newSetting;
     }
     public static void RandomizeMostLifeSettingsSettings(ServerLevel level, GameRules rules, MinecraftServer server, Random random){
         RandomizeBooleanRule(rules,server,random,"advancementsGiveLives",LifeRules.advancementsGiveLives);
         RandomizeBooleanRule(rules,server,random,"tamingGivesLives",LifeRules.tamingGivesLives);
         RandomizeBooleanRule(rules,server,random,"allPlayersShareHP",LifeRules.allPlayersShareHP);
-        RandomizeBooleanRule(rules,server,random,"useHPLives",LifeRules.useHPLives);
+        boolean useHPLives =RandomizeBooleanRule(rules,server,random,"useHPLives",LifeRules.useHPLives);
         RandomizeBooleanRule(rules,server,random,"showTeams",LifeRules.showTeams);
         RandomizeBooleanRule(rules,server,random,"damageCausesMaxHPLoss",LifeRules.damageCausesMaxHPLoss);
         RandomizeBooleanRule(rules,server,random,"hideLivesCounter",LifeRules.hideLivesCounter);
+        if(useHPLives) {
+            rules.getRule(LifeRules.maxOrStartingLives).set(random.nextInt(Config.minRandomLifeAmount.get()*2,Config.maxRandomLifeAmount.get()*2), server);
+            return;
+        }
         rules.getRule(LifeRules.maxOrStartingLives).set(random.nextInt(Config.minRandomLifeAmount.get(),Config.maxRandomLifeAmount.get()+1), server);
     }
 

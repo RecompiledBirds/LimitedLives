@@ -21,10 +21,10 @@ public class PositiveLifeEventHandler {
         if (!GameRuleHelper.AllowGainingLivesThroughTamingAnimals(player.serverLevel())) {
             return;
         }
-        GetScore("LLM.TamedAnimals",player,(input)->input+1);
+        GetAndChangeScore("LLM.TamedAnimals",player,(input)->input+1);
     }
 
-    private void GetScore(String objectiveName, ServerPlayer player, Function<Integer,Integer> changeValueFunction) {
+    private void GetAndChangeScore(String objectiveName, ServerPlayer player, Function<Integer,Integer> changeValueFunction) {
         Scoreboard board = ScoreBoardUtils.GetOrSetScoreBoard(player);
         String playerName = LifeUtility.GetNameForBoard(player);
         Objective currentObj = board.getOrCreateObjective(objectiveName);
@@ -52,7 +52,7 @@ public class PositiveLifeEventHandler {
         if (!GameRuleHelper.AdvancementsGiveLives(player.serverLevel()) || event.getAdvancement().getParent() == null || event.getAdvancement().getRewards().getRecipes().length > 0)
             return;
 
-        GetScore("LLM.AdvancementCountObjective",player,(input)->input+3);
+      //  GetAndChangeScore("LLM.AdvancementCountObjective",player,(input)->input+3);
 
 
     }

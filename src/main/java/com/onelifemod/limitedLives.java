@@ -9,6 +9,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.spongepowered.asm.mixin.Mixin;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(limitedLives.MOD_ID)
@@ -37,4 +38,6 @@ public class limitedLives {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, clientBuilder.build());
 
     }
+
+
 }

@@ -22,7 +22,11 @@ public class LifeRules {
         damageCausesMaxHPLoss = GameRules.register("DamageCausesMaxHPLoss", GameRules.Category.PLAYER,GameRules.BooleanValue.create(Config.damageCausesMaxHPLoss.get()));
         allPlayersShareHP = GameRules.register("AllPlayersShareHP", GameRules.Category.PLAYER,GameRules.BooleanValue.create(Config.healthSharedBetweenAllPlayers.get()));
         showTeams = GameRules.register("ShowTeams", GameRules.Category.PLAYER,GameRules.BooleanValue.create(Config.showTeams.get()));
-        maxOrStartingLives = GameRules.register("MaxOrStartingLives", GameRules.Category.PLAYER,GameRules.IntegerValue.create(Config.maxLives.get()));
+        if(Config.useHPLives.get()) {
+            maxOrStartingLives = GameRules.register("MaxOrStartingLives", GameRules.Category.PLAYER, GameRules.IntegerValue.create(10));
+        }else {
+            maxOrStartingLives = GameRules.register("MaxOrStartingLives", GameRules.Category.PLAYER, GameRules.IntegerValue.create(Config.maxLives.get()));
+        }
         allPlayersShareLives= GameRules.register("ShareLives", GameRules.Category.PLAYER,GameRules.BooleanValue.create(Config.livesSharedBetweenAllPlayers.get()));
         hideLivesCounter= GameRules.register("HideLivesCounter", GameRules.Category.PLAYER,GameRules.BooleanValue.create(Config.hideLivesCounter.get()));
     }
